@@ -4,6 +4,8 @@
 #include "utils/cameras.hpp"
 #include "utils/filesystem.hpp"
 #include "utils/shaders.hpp"
+#include <tiny_gltf.h>
+
 
 class ViewerApplication
 {
@@ -38,6 +40,11 @@ private:
   Camera m_userCamera;
 
   fs::path m_OutputPath;
+
+  bool loadGltfFile(tinygltf::Model &model);
+  std::vector<GLuint> createBufferObjects(const tinygltf::Model &model);
+  std::vector<GLuint> createVertexArrayObjects(const tinygltf::Model &model, const std::vector<GLuint> &bufferObjects, std::vector<VaoRange> &meshToVertexArrays);
+
 
   // Order is important here, see comment below
   const std::string m_ImGuiIniFilename;
