@@ -11,7 +11,6 @@ int main(int argc, char **argv)
 {
   auto returnCode = 0;
 
-  // args library https://github.com/taywee/args
   args::ArgumentParser parser{"glTF Viewer."};
   args::HelpFlag help{parser, "help", "Display this help menu", {'h', "help"}};
   args::Group commands{parser, "commands"};
@@ -23,6 +22,9 @@ int main(int argc, char **argv)
       }};
   args::Command interactive{
       commands, "viewer", "Run glTF viewer", [&](args::Subparser &parser) {
+        args::ValueFlag<std::string> upVector{parser, "up",
+            "Up vector to specify the convention used : (0, 1, 0) or (0, 0, 1).",
+            {"u", "up"}};
         args::Positional<std::string> file{
             parser, "file", "Path to file", args::Options::Required};
         args::ValueFlag<std::string> lookat{parser, "lookat",
@@ -64,7 +66,7 @@ int main(int argc, char **argv)
 
         ViewerApplication app{fs::path{argv[0]}, width, height, args::get(file),
             lookatParams, args::get(vertexShader), args::get(fragmentShader),
-            args::get(output)};
+            args::get(output), args::get(upVector)};
         returnCode = app.run();
       }};
 
